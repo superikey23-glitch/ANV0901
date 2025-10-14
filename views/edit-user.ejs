@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать пользователя - ParfumStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">ParfumStore</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <% if (user.role === 'admin') { %>
+                        <li><a href="/users">Пользователи</a></li>
+                    <% } %>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li><a href="/profile">Профиль</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <img src="<%= user.photo || '/images/default-avatar.png' %>" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    Вы вошли как: <strong><%= user.username %></strong>
+                    (<%= user.role %>)
+                    <a href="/logout" class="logout-btn">Выйти</a>
+                <% } else { %>
+                    <a href="/login" class="btn">Войти</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-container">
+            <h1>Редактировать пользователя</h1>
+            
+            <form action="/edit-user/<%= userToEdit.id %>" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="username">Имя пользователя *</label>
+                    <input type="text" id="username" name="username" value="<%= userToEdit.username %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">Полное имя</label>
+                    <input type="text" id="fullName" name="fullName" value="<%= userToEdit.fullName || '' %>">
+                </div>
+
+                <% if (user.role === 'admin') { %>
+                <div class="form-group">
+                    <label for="role">Роль *</label>
+                    <select id="role" name="role" required>
+                        <option value="user" <%= userToEdit.role === 'user' ? 'selected' : '' %>>Пользователь</option>
+                        <option value="admin" <%= userToEdit.role === 'admin' ? 'selected' : '' %>>Администратор</option>
+                    </select>
+                </div>
+                <% } %>
+
+                <div class="form-group">
+                    <label>Текущее фото</label>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <% if (userToEdit.photo) { %>
+                            <img src="<%= userToEdit.photo %>" alt="Текущее фото" style="width: 100px; height: 100px; border-radius: 10px; object-fit: cover;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="removePhoto" value="true">
+                                Удалить фото
+                            </label>
+                        <% } else { %>
+                            <div style="width: 100px; height: 100px; border-radius: 10px; background: #fce7f3; display: flex; align-items: center; justify-content: center; color: #db2777;">
+                                <i>Нет фото</i>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <label for="photo">Новое фото</label>
+                    <input type="file" id="photo" name="photo" accept="image/*">
+                    <small>Поддерживаемые форматы: JPG, PNG, GIF. Максимальный размер: 5MB</small>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn">Сохранить изменения</button>
+                    <% if (user.role === 'admin') { %>
+                        <a href="/users" class="btn btn-secondary">Отмена</a>
+                    <% } else { %>
+                        <a href="/profile" class="btn btn-secondary">Отмена</a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </main>
+
+
+</body>
+</html>

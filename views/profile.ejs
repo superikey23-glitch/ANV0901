@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя - ParfumStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">ParfumStore</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <% if (user.role === 'admin') { %>
+                        <li><a href="/users">Пользователи</a></li>
+                    <% } %>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li><a href="/profile">Профиль</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <img src="<%= user.photo || '/images/default-avatar.png' %>" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    Вы вошли как: <strong><%= user.username %></strong>
+                    (<%= user.role %>)
+                    <a href="/logout" class="logout-btn">Выйти</a>
+                <% } else { %>
+                    <a href="/login" class="btn">Войти</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-container">
+            <h1>Профиль пользователя</h1>
+            
+            <div class="profile-info">
+                <div class="profile-card">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <% if (userProfile.photo) { %>
+                            <img src="<%= userProfile.photo %>" alt="Фото профиля" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #fce7f3;">
+                        <% } else { %>
+                            <div style="width: 150px; height: 150px; border-radius: 50%; background: #fce7f3; display: flex; align-items: center; justify-content: center; color: #db2777; margin: 0 auto; border: 4px solid #fce7f3;">
+                                <i style="font-size: 3rem;">👤</i>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <h2>Личная информация</h2>
+                    <p><strong>Имя пользователя:</strong> <%= userProfile.username %></p>
+                    <p><strong>Полное имя:</strong> <%= userProfile.fullName || 'Не указано' %></p>
+                    <p><strong>Роль:</strong> 
+                        <span class="role-badge <%= userProfile.role === 'admin' ? 'admin' : 'user' %>">
+                            <%= userProfile.role === 'admin' ? 'Администратор' : 'Пользователь' %>
+                        </span>
+                    </p>
+                    <p><strong>ID:</strong> <%= userProfile.id %></p>
+                </div>
+                
+                <div class="profile-card">
+                    <h2>Статистика</h2>
+                    <p><strong>Заказов:</strong> 0</p>
+                    <p><strong>В системе с:</strong> <%= userProfile.createdAt.toLocaleDateString('ru-RU') %></p>
+                    <p><strong>Последнее обновление:</strong> <%= userProfile.updatedAt.toLocaleDateString('ru-RU') %></p>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <a href="/edit-user/<%= user.id %>" class="btn">Редактировать профиль</a>
+                <% if (user.role === 'admin') { %>
+                <a href="/users" class="btn btn-secondary">Управление пользователями</a>
+                <a href="/" class="btn btn-secondary">Панель администратора</a>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - ParfumStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h1>Регистрация</h1>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        <form action="/register" method="POST">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="fullName">Полное имя:</label>
+            <input type="text" id="fullName" name="fullName">
+            
+            <label for="role">Роль:</label>
+            <select id="role" name="role">
+                <option value="user">Пользователь</option>
+                <option value="admin">Администратор</option>
+            </select>
+            
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <p>Уже есть аккаунт? <a href="/login">Войти</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями - ParfumStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">ParfumStore</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <li><a href="/users">Пользователи</a></li>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li><a href="/profile">Профиль</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <img src="/img/a9a7392fdbbfdb00d58ea345ca96198f.avif" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    Вы вошли как: <strong><%= user.username %></strong>
+                    (<%= user.role %>)
+                    <a href="/logout" class="logout-btn">Выйти</a>
+                <% } else { %>
+                    <a href="/login" class="btn">Войти</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-container">
+            <h1>Управление пользователями</h1>
+            
+            <div class="buttons">
+                <a href="/add-user" class="btn">Добавить пользователя</a>
+                <a href="/" class="btn btn-secondary">На главную</a>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Фото</th>
+                        <th>Имя пользователя</th>
+                        <th>Полное имя</th>
+                        <th>Роль</th>
+                        <th>Дата регистрации</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                    <tr>
+                        <td>
+                            <% if (user.photo) { %>
+                                <img src="/img/a9a7392fdbbfdb00d58ea345ca96198f.avif" alt="Фото" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                            <% } else { %>
+                                <div style="width: 50px; height: 50px; border-radius: 50%; background: #fce7f3; display: flex; align-items: center; justify-content: center; color: #db2777;">
+                                    <i>Нет фото</i>
+                                </div>
+                            <% } %>
+                        </td>
+                        <td><%= user.username %></td>
+                        <td><%= user.fullName || 'Не указано' %></td>
+                        <td>
+                            <span class="role-badge <%= user.role === 'admin' ? 'admin' : 'user' %>">
+                                <%= user.role === 'admin' ? 'Админ' : 'Пользователь' %>
+                            </span>
+                        </td>
+                        <td><%= user.createdAt.toLocaleDateString('ru-RU') %></td>
+                        <td class="actions">
+                            <a href="/edit-user/<%= user.id %>" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Изменить</a>
+                            <% if (user.id !== user.id) { %>
+                            <form action="/delete-user/<%= user.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem;" 
+                                        onclick="return confirm('Вы уверены, что хотите удалить пользователя <%= user.username %>?')">
+                                    Удалить
+                                </button>
+                            </form>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>

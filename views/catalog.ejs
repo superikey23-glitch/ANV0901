@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог парфюмерии - ParfumStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">ParfumStore</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li><a href="/profile">Профиль</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    Вы вошли как: <strong><%= user.username %></strong>
+                    (<%= user.role %>)
+                    <a href="/logout" class="logout-btn">Выйти</a>
+                <% } else { %>
+                    <a href="/login" class="btn">Войти</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-container">
+            <h1>Каталог парфюмерии</h1>
+            
+            <div class="perfume-grid">
+                <% perfumes.forEach(perfume => { %>
+                <div class="perfume-card">
+                    <h3><%= perfume.name %></h3>
+                    <div class="price"><%= perfume.price.toFixed(2) %> ₽</div>
+                    <p><strong>Объем:</strong> <%= perfume.volume %> мл</p>
+                    <p><strong>Пол:</strong> <%= perfume.gender %></p>
+                    <p><strong>Бренд:</strong> <%= perfume.Brand.name %></p>
+                    <p><strong>Категория:</strong> <%= perfume.Category.name %></p>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button onclick="addToCart('<%= perfume.id %>')" class="btn">В корзину</button>
+                        <% if (user && user.role === 'admin') { %>
+                        <div style="margin-top: 0.5rem;">
+                            <a href="/edit-perfume/<%= perfume.id %>" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Изменить</a>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+
+            <% if (user && user.role === 'admin') { %>
+            <div class="buttons">
+                <a href="/add-perfume" class="btn">Добавить парфюм</a>
+                <a href="/add-brand" class="btn">Добавить бренд</a>
+                <a href="/add-category" class="btn">Добавить категорию</a>
+                <a href="/add-supplier" class="btn">Добавить поставщика</a>
+            </div>
+            <% } %>
+        </div>
+    </main>
+
+
+    <script>
+    function addToCart(perfumeId) {
+        alert('Товар добавлен в корзину! ID: ' + perfumeId);
+    }
+    </script>
+</body>
+</html>

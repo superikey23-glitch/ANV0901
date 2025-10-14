@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Парфюмерный магазин' %></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">ParfumStore</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li><a href="/profile">Профиль</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    Вы вошли как: <strong><%= user.username %></strong>
+                    (<%= user.role %>)
+                    <a href="/logout" class="logout-btn">Выйти</a>
+                <% } else { %>
+                    <a href="/login" class="btn">Войти</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <%- body %>
+    </main>
+
+
+</body>
+</html>
